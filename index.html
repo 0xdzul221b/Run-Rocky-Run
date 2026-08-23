@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+<title>Run Rocky Run</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial,sans-serif;
+  background:#c58b55;
+  touch-action:manipulation;
+}
+
+#game{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  background:
+    linear-gradient(
+      to bottom,
+      #e3b37c 0%,
+      #d9a66d 55%,
+      #c58b55 100%
+    );
+}
+
+/* ================= SKY ================= */
+
+.sun{
+  position:absolute;
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:#ffd27d;
+  top:8%;
+  right:12%;
+  box-shadow:0 0 40px #ffd27d;
+}
+
+.cloud{
+  position:absolute;
+  width:100px;
+  height:30px;
+  border-radius:30px;
+  background:#f4d3a2;
+  opacity:.7;
+}
+
+.cloud:before,
+.cloud:after{
+  content:"";
+  position:absolute;
+  background:#f4d3a2;
+  border-radius:50%;
+}
+
+.cloud:before{
+  width:45px;
+  height:45px;
+  left:15px;
+  top:-22px;
+}
+
+.cloud:after{
+  width:55px;
+  height:55px;
+  right:8px;
+  top:-28px;
+}
+
+.cloud1{
+  top:15%;
+  left:10%;
+}
+
+.cloud2{
+  top:27%;
+  right:25%;
+  transform:scale(.7);
+}
+
+/* ================= MOUNTAINS ================= */
+
+.mountain{
+  position:absolute;
+  bottom:30%;
+  width:0;
+  height:0;
+  border-left:100px solid transparent;
+  border-right:100px solid transparent;
+  border-bottom:180px solid #a86f42;
+  opacity:.75;
+}
+
+.m1{
+  left:-20px;
+  transform:scale(1.3);
+}
+
+.m2{
+  left:35%;
+  transform:scale(.9);
+}
+
+.m3{
+  right:-20px;
+  transform:scale(1.5);
+}
+
+/* ================= GROUND ================= */
+
+#ground{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:30%;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #9b633a 0px,
+      #9b633a 18px,
+      #8c5833 18px,
+      #8c5833 36px
+    );
+  border-top:8px solid #6d4328;
+}
+
+/* ================= SCORE ================= */
+
+#score{
+  position:absolute;
+  top:18px;
+  left:18px;
+  z-index:30;
+  color:white;
+  font-size:22px;
+  font-weight:bold;
+  text-shadow:2px 2px 4px #4b2d1a;
+}
+
+#best{
+  position:absolute;
+  top:18px;
+  right:18px;
+  z-index:30;
+  color:white;
+  font-size:18px;
+  font-weight:bold;
+  text-shadow:2px 2px 4px #4b2d1a;
+}
+
+/* ================= ROCKY ================= */
+
+#player{
+  position:absolute;
+  width:58px;
+  height:76px;
+  left:75px;
+  bottom:30%;
+  z-index:10;
+}
+
+/* body */
+.body{
+  position:absolute;
+  width:45px;
+  height:55px;
+  left:7px;
+  top:18px;
+  background:#77736b;
+  border:4px solid #302d29;
+  border-radius:15px 15px 12px 12px;
+}
+
+/* head */
+.head{
+  position:absolute;
+  width:48px;
+  height:38px;
+  left:5px;
+  top:0;
+  background:#8d8980;
+  border:4px solid #302d29;
+  border-radius:15px 15px 12px 12px;
+}
+
+/* crystal rocks */
+.crystal{
+  position:absolute;
+  width:15px;
+  height:20px;
+  background:#b76f3b;
+  border:3px solid #302d29;
+  transform:rotate(25deg);
+}
+
+.c1{
+  left:-7px;
+  top:17px;
+}
+
+.c2{
+  right:-7px;
+  top:17px;
+}
+
+.c3{
+  left:19px;
+  top:-8px;
+  transform:rotate(0);
+}
+
+/* eyes */
+.eye{
+  position:absolute;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#252321;
+  top:14px;
+}
+
+.e1{
+  left:14px;
+}
+
+.e2{
+  right:14px;
+}
+
+/* arms */
+.arm{
+  position:absolute;
+  width:17px;
+  height:35px;
+  background:#807b72;
+  border:4px solid #302d29;
+  border-radius:12px;
+  top:30px;
+}
+
+.arm.left{
+  left:-7px;
+  transform:rotate(25deg);
+}
+
+.arm.right{
+  right:-7px;
+  transform:rotate(-25deg);
+}
+
+/* legs */
+.leg{
+  position:absolute;
+  width:18px;
+  height:30px;
+  background:#69655e;
+  border:4px solid #302d29;
+  border-radius:8px;
+  bottom:-22px;
+}
+
+.leg.left{
+  left:10px;
+  transform:rotate(12deg);
+}
+
+.leg.right{
+  right:10px;
+  transform:rotate(-12deg);
+}
+
+/* ================= OBSTACLES ================= */
+
+.obstacle{
+  position:absolute;
+  bottom:30%;
+  z-index:8;
+}
+
+.rock{
+  width:50px;
+  height:48px;
+  background:#765039;
+  border:5px solid #3d2a1d;
+  border-radius:45% 55% 35% 50%;
+  transform:rotate(-8deg);
+  box-shadow:
+    inset 10px 8px 0 #987052,
+    inset -8px -8px 0 #543723;
+}
+
+.rock.small{
+  width:38px;
+  height:35px;
+}
+
+.rock.tall{
+  width:45px;
+  height:75px;
+  border-radius:50% 40% 20% 30%;
+  transform:rotate(5deg);
+}
+
+/* ================= START / GAME OVER ================= */
+
+.overlay{
+  position:absolute;
+  inset:0;
+  z-index:50;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  color:white;
+  background:rgba(55,32,20,.68);
+}
+
+#gameOver{
+  display:none;
+}
+
+.title{
+  font-size:46px;
+  line-height:.95;
+  font-weight:900;
+  color:#f4c27b;
+  text-shadow:
+    4px 4px 0 #4b2b19,
+    7px 7px 0 #24160e;
+  margin-bottom:12px;
+}
+
+.subtitle{
+  font-size:17px;
+  margin-bottom:18px;
+}
+
+button{
+  border:4px solid #4b2b19;
+  background:#b96d32;
+  color:white;
+  padding:15px 38px;
+  border-radius:15px;
+  font-size:21px;
+  font-weight:bold;
+  box-shadow:0 6px 0 #4b2b19;
+}
+
+button:active{
+  transform:translateY(5px);
+  box-shadow:0 1px 0 #4b2b19;
+}
+
+#hint{
+  position:absolute;
+  bottom:18px;
+  width:100%;
+  text-align:center;
+  z-index:25;
+  color:#fff;
+  font-size:15px;
+  font-weight:bold;
+  text-shadow:2px 2px 3px #4b2d1a;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:500px){
+
+  .title{
+    font-size:40px;
+  }
+
+  #player{
+    left:55px;
+  }
+
+  #score{
+    font-size:19px;
+  }
+
+  #best{
+    font-size:16px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+  <div class="sun"></div>
+
+  <div class="cloud cloud1"></div>
+  <div class="cloud cloud2"></div>
+
+  <div class="mountain m1"></div>
+  <div class="mountain m2"></div>
+  <div class="mountain m3"></div>
+
+  <div id="score">SCORE: 0</div>
+  <div id="best">BEST: 0</div>
+
+  <!-- ROCKY -->
+  <div id="player">
+
+    <div class="head">
+      <div class="eye e1"></div>
+      <div class="eye e2"></div>
+    </div>
+
+    <div class="crystal c1"></div>
+    <div class="crystal c2"></div>
+    <div class="crystal c3"></div>
+
+    <div class="body"></div>
+
+    <div class="arm left"></div>
+    <div class="arm right"></div>
+
+    <div class="leg left"></div>
+    <div class="leg right"></div>
+
+  </div>
+
+  <div id="ground"></div>
+
+  <!-- START -->
+  <div id="startScreen" class="overlay">
+
+    <div class="title">
+      RUN<br>ROCKY<br>RUN
+    </div>
+
+    <div class="subtitle">
+      Jump over the rocks and survive!
+    </div>
+
+    <button onclick="startGame()">
+      PLAY
+    </button>
+
+  </div>
+
+  <!-- GAME OVER -->
+  <div id="gameOver" class="overlay">
+
+    <div class="title">
+      GAME<br>OVER
+    </div>
+
+    <div id="finalScore">
+      SCORE: 0
+    </div>
+
+    <button onclick="restartGame()">
+      RUN AGAIN
+    </button>
+
+  </div>
+
+  <div id="hint">
+    TAP ANYWHERE TO JUMP
+  </div>
+
+</div>
+
+<script>
+
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+const scoreText = document.getElementById("score");
+const bestText = document.getElementById("best");
+
+const startScreen =
+document.getElementById("startScreen");
+
+const gameOver =
+document.getElementById("gameOver");
+
+const finalScore =
+document.getElementById("finalScore");
+
+let running = false;
+let jumping = false;
+
+let score = 0;
+let best = Number(localStorage.getItem("rockyBest")) || 0;
+
+let speed = 6;
+let obstacles = [];
+
+let animation;
+let obstacleTimer;
+
+bestText.textContent = "BEST: " + best;
+
+
+/* ================= START ================= */
+
+function startGame(){
+
+  startScreen.style.display = "none";
+  gameOver.style.display = "none";
+
+  score = 0;
+  speed = 6;
+  running = true;
+  jumping = false;
+
+  scoreText.textContent = "SCORE: 0";
+
+  clearObstacles();
+
+  spawnObstacle();
+
+  obstacleTimer = setTimeout(
+    obstacleLoop,
+    1500
+  );
+
+  animation =
+    requestAnimationFrame(update);
+}
+
+
+/* ================= OBSTACLE LOOP ================= */
+
+function obstacleLoop(){
+
+  if(!running) return;
+
+  spawnObstacle();
+
+  let delay =
+    Math.max(
+      850,
+      1700 - score * 12
+    );
+
+  obstacleTimer =
+    setTimeout(
+      obstacleLoop,
+      delay
+    );
+}
+
+
+/* ================= SPAWN ================= */
+
+function spawnObstacle(){
+
+  const obstacle =
+  document.createElement("div");
+
+  obstacle.className =
+  "obstacle";
+
+  const rock =
+  document.createElement("div");
+
+  let random =
+  Math.random();
+
+  if(random < .25){
+
+    rock.className =
+    "rock small";
+
+  }else if(random > .75){
+
+    rock.className =
+    "rock tall";
+
+  }else{
+
+    rock.className =
+    "rock";
+
+  }
+
+  obstacle.appendChild(rock);
+
+  obstacle.style.left =
+  (window.innerWidth + 60) + "px";
+
+  game.appendChild(obstacle);
+
+  obstacles.push({
+    element: obstacle,
+    x: window.innerWidth + 60
+  });
+}
+
+
+/* ================= JUMP ================= */
+
+function jump(){
+
+  if(!running || jumping)
+    return;
+
+  jumping = true;
+
+  const start =
+    performance.now();
+
+  const duration = 650;
+  const jumpHeight = 175;
+
+  function animate(time){
+
+    if(!running){
+      jumping = false;
+      return;
+    }
+
+    let progress =
+      (time - start) / duration;
+
+    if(progress >= 1){
+
+      player.style.bottom =
+        "30%";
+
+      jumping = false;
+
+      return;
+    }
+
+    let height =
+      Math.sin(progress * Math.PI)
+      * jumpHeight;
+
+    player.style.bottom =
+      `calc(30% + ${height}px)`;
+
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+}
+
+
+/* ================= GAME LOOP ================= */
+
+function update(){
+
+  if(!running)
+    return;
+
+  for(
+    let i = obstacles.length - 1;
+    i >= 0;
+    i--
+  ){
+
+    const obstacle =
+      obstacles[i];
+
+    obstacle.x -= speed;
+
+    obstacle.element.style.left =
+      obstacle.x + "px";
+
+    if(obstacle.x < -100){
+
+      obstacle.element.remove();
+
+      obstacles.splice(i,1);
+
+      score++;
+
+      scoreText.textContent =
+        "SCORE: " + score;
+
+      /* Increase difficulty */
+
+      if(score % 5 === 0){
+
+        speed += .55;
+      }
+
+      continue;
+    }
+
+    if(
+      collision(
+        player,
+        obstacle.element
+      )
+    ){
+
+      endGame();
+      return;
+    }
+  }
+
+  animation =
+    requestAnimationFrame(update);
+}
+
+
+/* ================= COLLISION ================= */
+
+function collision(a,b){
+
+  const r1 =
+    a.getBoundingClientRect();
+
+  const r2 =
+    b.getBoundingClientRect();
+
+  /* Smaller hitbox for fair gameplay */
+
+  const padding = 8;
+
+  return !(
+    r1.right - padding < r2.left ||
+    r1.left + padding > r2.right ||
+    r1.bottom - padding < r2.top ||
+    r1.top + padding > r2.bottom
+  );
+}
+
+
+/* ================= GAME OVER ================= */
+
+function endGame(){
+
+  running = false;
+
+  cancelAnimationFrame(animation);
+
+  clearTimeout(obstacleTimer);
+
+  if(score > best){
+
+    best = score;
+
+    localStorage.setItem(
+      "rockyBest",
+      best
+    );
+  }
+
+  bestText.textContent =
+    "BEST: " + best;
+
+  finalScore.textContent =
+    "SCORE: " + score;
+
+  gameOver.style.display =
+    "flex";
+}
+
+
+/* ================= RESTART ================= */
+
+function restartGame(){
+
+  clearObstacles();
+
+  startGame();
+}
+
+
+/* ================= CLEAR ================= */
+
+function clearObstacles(){
+
+  obstacles.forEach(
+    o => o.element.remove()
+  );
+
+  obstacles = [];
+}
+
+
+/* ================= MOBILE CONTROL ================= */
+
+document.addEventListener(
+  "touchstart",
+  function(e){
+
+    if(
+      running &&
+      e.target.tagName !== "BUTTON"
+    ){
+
+      e.preventDefault();
+
+      jump();
+    }
+
+  },
+  {passive:false}
+);
+
+
+/* ================= KEYBOARD ================= */
+
+document.addEventListener(
+  "keydown",
+  function(e){
+
+    if(
+      e.code === "Space" ||
+      e.code === "ArrowUp"
+    ){
+
+      jump();
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
