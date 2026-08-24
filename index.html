@@ -1,385 +1,966 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport"
-content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
 
 <title>Run Rocky Run</title>
 
 <style>
+
+/* =========================
+   RESET
+========================= */
+
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
+
   -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,
+body{
+
   width:100%;
   height:100%;
+
   overflow:hidden;
+
   font-family:Arial,sans-serif;
+
   background:#c58b55;
+
   touch-action:manipulation;
 }
 
+
+/* =========================
+   GAME WORLD
+========================= */
+
 #game{
+
   position:relative;
+
   width:100vw;
   height:100vh;
+
   overflow:hidden;
+
   background:
-    linear-gradient(
-      to bottom,
-      #e3b37c 0%,
-      #d9a66d 55%,
-      #c58b55 100%
-    );
+  linear-gradient(
+    to bottom,
+    #e3b37c 0%,
+    #d9a66d 55%,
+    #c58b55 100%
+  );
 }
 
-/* ================= SKY ================= */
+
+/* =========================
+   MOVING BACKGROUND
+========================= */
+
+#game::before{
+
+  content:"";
+
+  position:absolute;
+
+  left:0;
+  bottom:30%;
+
+  width:250%;
+
+  height:35%;
+
+  background:
+
+  linear-gradient(
+    135deg,
+    transparent 35%,
+    #a86f42 35%,
+    #a86f42 50%,
+    transparent 50%
+  );
+
+  background-size:
+  260px 180px;
+
+  opacity:.42;
+
+  animation:
+  mountainsMove 14s linear infinite;
+
+  z-index:1;
+}
+
+
+#game::after{
+
+  content:"";
+
+  position:absolute;
+
+  left:0;
+  bottom:30%;
+
+  width:300%;
+
+  height:16%;
+
+  background:
+
+  radial-gradient(
+    ellipse,
+    #8c5833 0%,
+    #8c5833 45%,
+    transparent 48%
+  );
+
+  background-size:
+  180px 70px;
+
+  opacity:.5;
+
+  animation:
+  groundObjectsMove 5s linear infinite;
+
+  z-index:2;
+}
+
+
+@keyframes mountainsMove{
+
+  from{
+    transform:translateX(0);
+  }
+
+  to{
+    transform:translateX(-520px);
+  }
+}
+
+
+@keyframes groundObjectsMove{
+
+  from{
+    transform:translateX(0);
+  }
+
+  to{
+    transform:translateX(-540px);
+  }
+}
+
+
+/* =========================
+   SUN
+========================= */
 
 .sun{
+
   position:absolute;
+
   width:90px;
   height:90px;
+
   border-radius:50%;
+
   background:#ffd27d;
+
   top:8%;
   right:12%;
-  box-shadow:0 0 40px #ffd27d;
+
+  box-shadow:
+  0 0 40px #ffd27d;
+
+  z-index:2;
 }
 
+
+/* =========================
+   CLOUDS
+========================= */
+
 .cloud{
+
   position:absolute;
+
   width:100px;
   height:30px;
+
   border-radius:30px;
+
   background:#f4d3a2;
+
   opacity:.7;
+
+  z-index:3;
+
+  animation:
+  cloudMove 25s linear infinite;
 }
+
 
 .cloud:before,
 .cloud:after{
+
   content:"";
+
   position:absolute;
+
   background:#f4d3a2;
+
   border-radius:50%;
 }
 
+
 .cloud:before{
+
   width:45px;
   height:45px;
+
   left:15px;
   top:-22px;
 }
 
+
 .cloud:after{
+
   width:55px;
   height:55px;
+
   right:8px;
   top:-28px;
 }
 
+
 .cloud1{
+
   top:15%;
   left:10%;
 }
 
+
 .cloud2{
+
   top:27%;
   right:25%;
+
   transform:scale(.7);
 }
 
-/* ================= MOUNTAINS ================= */
+
+@keyframes cloudMove{
+
+  from{
+    transform:translateX(100vw);
+  }
+
+  to{
+    transform:translateX(-250px);
+  }
+}
+
+
+/* =========================
+   MOUNTAINS
+========================= */
 
 .mountain{
+
   position:absolute;
+
   bottom:30%;
+
   width:0;
   height:0;
-  border-left:100px solid transparent;
-  border-right:100px solid transparent;
-  border-bottom:180px solid #a86f42;
+
+  border-left:
+  100px solid transparent;
+
+  border-right:
+  100px solid transparent;
+
+  border-bottom:
+  180px solid #a86f42;
+
   opacity:.75;
+
+  z-index:3;
+
+  animation:
+  mountainScroll 18s linear infinite;
 }
+
 
 .m1{
   left:-20px;
   transform:scale(1.3);
 }
 
+
 .m2{
   left:35%;
   transform:scale(.9);
 }
+
 
 .m3{
   right:-20px;
   transform:scale(1.5);
 }
 
-/* ================= GROUND ================= */
+
+@keyframes mountainScroll{
+
+  from{
+    transform:translateX(0);
+  }
+
+  to{
+    transform:translateX(-700px);
+  }
+}
+
+
+/* =========================
+   GROUND
+========================= */
 
 #ground{
+
   position:absolute;
+
   bottom:0;
+
   width:100%;
   height:30%;
+
   background:
-    repeating-linear-gradient(
-      45deg,
-      #9b633a 0px,
-      #9b633a 18px,
-      #8c5833 18px,
-      #8c5833 36px
-    );
-  border-top:8px solid #6d4328;
+
+  repeating-linear-gradient(
+    45deg,
+    #9b633a 0px,
+    #9b633a 18px,
+    #8c5833 18px,
+    #8c5833 36px
+  );
+
+  border-top:
+  8px solid #6d4328;
+
+  z-index:6;
 }
 
-/* ================= SCORE ================= */
+
+/* =========================
+   SCORE
+========================= */
 
 #score{
+
   position:absolute;
+
   top:18px;
   left:18px;
+
   z-index:30;
+
   color:white;
+
   font-size:22px;
+
   font-weight:bold;
-  text-shadow:2px 2px 4px #4b2d1a;
+
+  text-shadow:
+  2px 2px 4px #4b2d1a;
 }
+
 
 #best{
+
   position:absolute;
+
   top:18px;
   right:18px;
+
   z-index:30;
+
   color:white;
+
   font-size:18px;
+
   font-weight:bold;
-  text-shadow:2px 2px 4px #4b2d1a;
+
+  text-shadow:
+  2px 2px 4px #4b2d1a;
 }
 
-/* ================= ROCKY ================= */
+
+#level{
+
+  position:absolute;
+
+  top:52px;
+  left:18px;
+
+  z-index:30;
+
+  color:white;
+
+  font-size:17px;
+
+  font-weight:bold;
+
+  text-shadow:
+  2px 2px 4px #4b2d1a;
+}
+
+
+/* =========================
+   ROCKY
+========================= */
 
 #player{
+
   position:absolute;
+
   width:58px;
   height:76px;
+
   left:75px;
+
   bottom:30%;
+
   z-index:10;
+
+  transform-origin:center bottom;
+
+  animation:
+  rockyBounce .28s
+  ease-in-out infinite alternate;
 }
 
-/* body */
+
+/* BODY */
+
 .body{
+
   position:absolute;
+
   width:45px;
   height:55px;
+
   left:7px;
   top:18px;
+
   background:#77736b;
-  border:4px solid #302d29;
-  border-radius:15px 15px 12px 12px;
+
+  border:
+  4px solid #302d29;
+
+  border-radius:
+  15px 15px 12px 12px;
 }
 
-/* head */
+
+/* HEAD */
+
 .head{
+
   position:absolute;
+
   width:48px;
   height:38px;
+
   left:5px;
   top:0;
+
   background:#8d8980;
-  border:4px solid #302d29;
-  border-radius:15px 15px 12px 12px;
+
+  border:
+  4px solid #302d29;
+
+  border-radius:
+  15px 15px 12px 12px;
+
+  animation:
+  headMove .35s
+  ease-in-out infinite alternate;
 }
 
-/* crystal rocks */
-.crystal{
-  position:absolute;
-  width:15px;
-  height:20px;
-  background:#b76f3b;
-  border:3px solid #302d29;
-  transform:rotate(25deg);
-}
 
-.c1{
-  left:-7px;
-  top:17px;
-}
+/* EYES */
 
-.c2{
-  right:-7px;
-  top:17px;
-}
-
-.c3{
-  left:19px;
-  top:-8px;
-  transform:rotate(0);
-}
-
-/* eyes */
 .eye{
+
   position:absolute;
+
   width:7px;
   height:7px;
+
   border-radius:50%;
+
   background:#252321;
+
   top:14px;
 }
+
 
 .e1{
   left:14px;
 }
 
+
 .e2{
   right:14px;
 }
 
-/* arms */
-.arm{
+
+/* CRYSTALS */
+
+.crystal{
+
   position:absolute;
+
+  width:15px;
+  height:20px;
+
+  background:#b76f3b;
+
+  border:
+  3px solid #302d29;
+
+  transform:rotate(25deg);
+
+  z-index:4;
+}
+
+
+.c1{
+
+  left:-7px;
+  top:17px;
+}
+
+
+.c2{
+
+  right:-7px;
+  top:17px;
+}
+
+
+.c3{
+
+  left:19px;
+  top:-8px;
+
+  transform:rotate(0);
+}
+
+
+/* ARMS */
+
+.arm{
+
+  position:absolute;
+
   width:17px;
   height:35px;
+
   background:#807b72;
-  border:4px solid #302d29;
+
+  border:
+  4px solid #302d29;
+
   border-radius:12px;
+
   top:30px;
 }
 
+
 .arm.left{
+
   left:-7px;
+
   transform:rotate(25deg);
+
+  transform-origin:top center;
+
+  animation:
+  armLeft .28s
+  linear infinite alternate;
 }
+
 
 .arm.right{
+
   right:-7px;
+
   transform:rotate(-25deg);
+
+  transform-origin:top center;
+
+  animation:
+  armRight .28s
+  linear infinite alternate;
 }
 
-/* legs */
+
+/* LEGS */
+
 .leg{
+
   position:absolute;
+
   width:18px;
   height:30px;
+
   background:#69655e;
-  border:4px solid #302d29;
+
+  border:
+  4px solid #302d29;
+
   border-radius:8px;
+
   bottom:-22px;
+
+  transform-origin:top center;
 }
+
 
 .leg.left{
+
   left:10px;
-  transform:rotate(12deg);
+
+  animation:
+  legLeft .28s
+  linear infinite alternate;
 }
+
 
 .leg.right{
+
   right:10px;
-  transform:rotate(-12deg);
+
+  animation:
+  legRight .28s
+  linear infinite alternate;
 }
 
-/* ================= OBSTACLES ================= */
+
+/* RUN ANIMATIONS */
+
+@keyframes rockyBounce{
+
+  from{
+    transform:
+    translateY(0)
+    rotate(-2deg);
+  }
+
+  to{
+    transform:
+    translateY(-5px)
+    rotate(2deg);
+  }
+}
+
+
+@keyframes headMove{
+
+  from{
+    transform:translateY(0);
+  }
+
+  to{
+    transform:translateY(-2px);
+  }
+}
+
+
+@keyframes legLeft{
+
+  from{
+    transform:rotate(25deg);
+  }
+
+  to{
+    transform:rotate(-25deg);
+  }
+}
+
+
+@keyframes legRight{
+
+  from{
+    transform:rotate(-25deg);
+  }
+
+  to{
+    transform:rotate(25deg);
+  }
+}
+
+
+@keyframes armLeft{
+
+  from{
+    transform:rotate(-25deg);
+  }
+
+  to{
+    transform:rotate(25deg);
+  }
+}
+
+
+@keyframes armRight{
+
+  from{
+    transform:rotate(25deg);
+  }
+
+  to{
+    transform:rotate(-25deg);
+  }
+}
+
+
+/* =========================
+   JUMP STATE
+========================= */
+
+#player.jumping{
+
+  animation:none;
+}
+
+
+#player.jumping .leg,
+#player.jumping .arm{
+
+  animation:none;
+}
+
+
+#player.jumping .leg.left{
+
+  transform:rotate(35deg);
+}
+
+
+#player.jumping .leg.right{
+
+  transform:rotate(-35deg);
+}
+
+
+#player.jumping .arm.left{
+
+  transform:rotate(-40deg);
+}
+
+
+#player.jumping .arm.right{
+
+  transform:rotate(40deg);
+}
+
+
+/* =========================
+   OBSTACLES
+========================= */
 
 .obstacle{
+
   position:absolute;
+
   bottom:30%;
+
   z-index:8;
 }
 
+
 .rock{
+
   width:50px;
   height:48px;
+
   background:#765039;
-  border:5px solid #3d2a1d;
-  border-radius:45% 55% 35% 50%;
+
+  border:
+  5px solid #3d2a1d;
+
+  border-radius:
+  45% 55% 35% 50%;
+
   transform:rotate(-8deg);
+
   box-shadow:
-    inset 10px 8px 0 #987052,
-    inset -8px -8px 0 #543723;
+
+  inset 10px 8px 0 #987052,
+
+  inset -8px -8px 0 #543723;
 }
 
+
 .rock.small{
+
   width:38px;
   height:35px;
 }
 
+
 .rock.tall{
+
   width:45px;
   height:75px;
-  border-radius:50% 40% 20% 30%;
+
+  border-radius:
+  50% 40% 20% 30%;
+
   transform:rotate(5deg);
 }
 
-/* ================= START / GAME OVER ================= */
+
+/* =========================
+   OVERLAYS
+========================= */
 
 .overlay{
+
   position:absolute;
+
   inset:0;
+
   z-index:50;
+
   display:flex;
+
   flex-direction:column;
+
   justify-content:center;
+
   align-items:center;
+
   text-align:center;
+
   color:white;
-  background:rgba(55,32,20,.68);
+
+  background:
+  rgba(55,32,20,.68);
 }
 
+
 #gameOver{
+
   display:none;
 }
 
+
 .title{
+
   font-size:46px;
+
   line-height:.95;
+
   font-weight:900;
+
   color:#f4c27b;
+
   text-shadow:
-    4px 4px 0 #4b2b19,
-    7px 7px 0 #24160e;
+
+  4px 4px 0 #4b2b19,
+
+  7px 7px 0 #24160e;
+
   margin-bottom:12px;
 }
 
+
 .subtitle{
+
   font-size:17px;
+
   margin-bottom:18px;
 }
 
+
 button{
-  border:4px solid #4b2b19;
+
+  border:
+  4px solid #4b2b19;
+
   background:#b96d32;
+
   color:white;
-  padding:15px 38px;
+
+  padding:
+  15px 38px;
+
   border-radius:15px;
+
   font-size:21px;
+
   font-weight:bold;
-  box-shadow:0 6px 0 #4b2b19;
+
+  box-shadow:
+  0 6px 0 #4b2b19;
 }
+
 
 button:active{
+
   transform:translateY(5px);
-  box-shadow:0 1px 0 #4b2b19;
+
+  box-shadow:
+  0 1px 0 #4b2b19;
 }
+
+
+/* =========================
+   HINT
+========================= */
 
 #hint{
+
   position:absolute;
+
   bottom:18px;
+
   width:100%;
+
   text-align:center;
+
   z-index:25;
-  color:#fff;
+
+  color:white;
+
   font-size:15px;
+
   font-weight:bold;
-  text-shadow:2px 2px 3px #4b2d1a;
+
+  text-shadow:
+  2px 2px 3px #4b2d1a;
 }
 
-/* ================= MOBILE ================= */
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:500px){
 
@@ -398,13 +979,24 @@ button:active{
   #best{
     font-size:16px;
   }
+
+  #level{
+    font-size:15px;
+  }
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div id="game">
+
+
+  <!-- BACKGROUND -->
 
   <div class="sun"></div>
 
@@ -415,15 +1007,31 @@ button:active{
   <div class="mountain m2"></div>
   <div class="mountain m3"></div>
 
-  <div id="score">SCORE: 0</div>
-  <div id="best">BEST: 0</div>
+
+  <!-- HUD -->
+
+  <div id="score">
+    SCORE: 0
+  </div>
+
+  <div id="best">
+    BEST: 0
+  </div>
+
+  <div id="level">
+    LEVEL 1 • DESERT
+  </div>
+
 
   <!-- ROCKY -->
+
   <div id="player">
 
     <div class="head">
+
       <div class="eye e1"></div>
       <div class="eye e2"></div>
+
     </div>
 
     <div class="crystal c1"></div>
@@ -440,54 +1048,97 @@ button:active{
 
   </div>
 
+
+  <!-- GROUND -->
+
   <div id="ground"></div>
 
-  <!-- START -->
+
+  <!-- START SCREEN -->
+
   <div id="startScreen" class="overlay">
 
     <div class="title">
-      RUN<br>ROCKY<br>RUN
+
+      RUN<br>
+      ROCKY<br>
+      RUN
+
     </div>
 
     <div class="subtitle">
-      Jump over the rocks and survive!
+
+      Jump over the rocks<br>
+      and survive!
+
     </div>
 
     <button onclick="startGame()">
+
       PLAY
+
     </button>
 
   </div>
 
+
   <!-- GAME OVER -->
+
   <div id="gameOver" class="overlay">
 
     <div class="title">
-      GAME<br>OVER
+
+      GAME<br>
+      OVER
+
     </div>
 
     <div id="finalScore">
+
       SCORE: 0
+
     </div>
 
-    <button onclick="restartGame()">
+    <button onclick="buttonSound(); restartGame()">
+
       RUN AGAIN
+
     </button>
 
   </div>
 
+
   <div id="hint">
+
     TAP ANYWHERE TO JUMP
+
   </div>
+
 
 </div>
 
+
+
 <script>
 
-const game = document.getElementById("game");
-const player = document.getElementById("player");
-const scoreText = document.getElementById("score");
-const bestText = document.getElementById("best");
+/* =========================
+   GAME VARIABLES
+========================= */
+
+const game =
+document.getElementById("game");
+
+const player =
+document.getElementById("player");
+
+const scoreText =
+document.getElementById("score");
+
+const bestText =
+document.getElementById("best");
+
+const levelText =
+document.getElementById("level");
 
 const startScreen =
 document.getElementById("startScreen");
@@ -498,208 +1149,779 @@ document.getElementById("gameOver");
 const finalScore =
 document.getElementById("finalScore");
 
+
 let running = false;
+
 let jumping = false;
 
 let score = 0;
-let best = Number(localStorage.getItem("rockyBest")) || 0;
+
+let level = 1;
 
 let speed = 6;
+
 let obstacles = [];
 
 let animation;
+
 let obstacleTimer;
 
-bestText.textContent = "BEST: " + best;
+
+/* =========================
+   BEST SCORE
+========================= */
+
+let best =
+Number(
+  localStorage.getItem("rockyBest")
+) || 0;
+
+bestText.textContent =
+"BEST: " + best;
 
 
-/* ================= START ================= */
+/* =========================
+   LEVEL SETTINGS
+========================= */
+
+const levels = {
+
+  1:{
+    name:"DESERT",
+    speed:6,
+    spawn:1700,
+    background:"#e3b37c"
+  },
+
+  2:{
+    name:"ROCKY VALLEY",
+    speed:7,
+    spawn:1500,
+    background:"#c99563"
+  },
+
+  3:{
+    name:"CANYON",
+    speed:8,
+    spawn:1300,
+    background:"#b87545"
+  },
+
+  4:{
+    name:"LAVA ROCK",
+    speed:9,
+    spawn:1100,
+    background:"#8f4d38"
+  },
+
+  5:{
+    name:"DARK MOUNTAIN",
+    speed:10,
+    spawn:950,
+    background:"#604b45"
+  }
+
+};
+
+
+/* =========================
+   AUDIO
+========================= */
+
+let audioCtx;
+
+
+function initAudio(){
+
+  if(!audioCtx){
+
+    audioCtx =
+    new (
+      window.AudioContext ||
+      window.webkitAudioContext
+    )();
+
+  }
+
+  if(
+    audioCtx.state ===
+    "suspended"
+  ){
+
+    audioCtx.resume();
+
+  }
+}
+
+
+function playTone(
+  frequency,
+  duration,
+  type="square",
+  volume=.06
+){
+
+  if(!audioCtx)
+    return;
+
+  const oscillator =
+    audioCtx.createOscillator();
+
+  const gain =
+    audioCtx.createGain();
+
+
+  oscillator.type =
+    type;
+
+  oscillator.frequency.setValueAtTime(
+    frequency,
+    audioCtx.currentTime
+  );
+
+
+  gain.gain.setValueAtTime(
+    volume,
+    audioCtx.currentTime
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    .001,
+    audioCtx.currentTime +
+    duration
+  );
+
+
+  oscillator.connect(gain);
+
+  gain.connect(
+    audioCtx.destination
+  );
+
+
+  oscillator.start();
+
+  oscillator.stop(
+    audioCtx.currentTime +
+    duration
+  );
+
+}
+
+
+/* START */
+
+function startSound(){
+
+  initAudio();
+
+  playTone(
+    440,
+    .08,
+    "square",
+    .06
+  );
+
+  setTimeout(
+    () => {
+
+      playTone(
+        660,
+        .12,
+        "square",
+        .07
+      );
+
+    },
+    90
+  );
+
+}
+
+
+/* JUMP */
+
+function jumpSound(){
+
+  initAudio();
+
+  playTone(
+    420,
+    .08,
+    "square",
+    .05
+  );
+
+  setTimeout(
+    () => {
+
+      playTone(
+        620,
+        .10,
+        "square",
+        .05
+      );
+
+    },
+    60
+  );
+
+}
+
+
+/* SCORE */
+
+function scoreSound(){
+
+  initAudio();
+
+  playTone(
+    700,
+    .06,
+    "sine",
+    .05
+  );
+
+  setTimeout(
+    () => {
+
+      playTone(
+        900,
+        .08,
+        "sine",
+        .05
+      );
+
+    },
+    60
+  );
+
+}
+
+
+/* LEVEL UP */
+
+function levelUpSound(){
+
+  initAudio();
+
+  playTone(
+    520,
+    .08,
+    "square",
+    .06
+  );
+
+  setTimeout(
+    () => {
+
+      playTone(
+        700,
+        .08,
+        "square",
+        .06
+      );
+
+    },
+    100
+  );
+
+  setTimeout(
+    () => {
+
+      playTone(
+        900,
+        .15,
+        "square",
+        .07
+      );
+
+    },
+    200
+  );
+
+}
+
+
+/* GAME OVER */
+
+function gameOverSound(){
+
+  initAudio();
+
+  playTone(
+    300,
+    .15,
+    "sawtooth",
+    .07
+  );
+
+  setTimeout(
+    () => {
+
+      playTone(
+        180,
+        .25,
+        "sawtooth",
+        .06
+      );
+
+    },
+    160
+  );
+
+}
+
+
+/* BUTTON */
+
+function buttonSound(){
+
+  initAudio();
+
+  playTone(
+    520,
+    .07,
+    "square",
+    .05
+  );
+
+}
+
+
+/* =========================
+   START GAME
+========================= */
 
 function startGame(){
 
-  startScreen.style.display = "none";
-  gameOver.style.display = "none";
+  startSound();
+
+  startScreen.style.display =
+    "none";
+
+  gameOver.style.display =
+    "none";
+
 
   score = 0;
+
+  level = 1;
+
   speed = 6;
+
   running = true;
+
   jumping = false;
 
-  scoreText.textContent = "SCORE: 0";
+
+  scoreText.textContent =
+    "SCORE: 0";
+
+
+  updateLevel();
 
   clearObstacles();
 
   spawnObstacle();
 
-  obstacleTimer = setTimeout(
-    obstacleLoop,
-    1500
-  );
-
-  animation =
-    requestAnimationFrame(update);
-}
-
-
-/* ================= OBSTACLE LOOP ================= */
-
-function obstacleLoop(){
-
-  if(!running) return;
-
-  spawnObstacle();
-
-  let delay =
-    Math.max(
-      850,
-      1700 - score * 12
-    );
 
   obstacleTimer =
     setTimeout(
       obstacleLoop,
-      delay
+      levels[1].spawn
     );
+
+
+  animation =
+    requestAnimationFrame(
+      update
+    );
+
 }
 
 
-/* ================= SPAWN ================= */
+/* =========================
+   LEVEL UPDATE
+========================= */
+
+function updateLevel(){
+
+  const oldLevel =
+    level;
+
+
+  if(score <= 15){
+
+    level = 1;
+
+  }
+
+  else if(score <= 30){
+
+    level = 2;
+
+  }
+
+  else if(score <= 45){
+
+    level = 3;
+
+  }
+
+  else if(score <= 60){
+
+    level = 4;
+
+  }
+
+  else{
+
+    level = 5;
+
+  }
+
+
+  const current =
+    levels[level];
+
+
+  levelText.textContent =
+    "LEVEL " +
+    level +
+    " • " +
+    current.name;
+
+
+  speed =
+    current.speed;
+
+
+  /*
+    Change sky according
+    to level.
+  */
+
+  game.style.background =
+  `linear-gradient(
+    to bottom,
+    ${current.background} 0%,
+    ${current.background} 55%,
+    #8c5833 100%
+  )`;
+
+
+  if(
+    running &&
+    level > oldLevel
+  ){
+
+    levelUpSound();
+
+  }
+
+}
+
+
+/* =========================
+   OBSTACLE LOOP
+========================= */
+
+function obstacleLoop(){
+
+  if(!running)
+    return;
+
+
+  spawnObstacle();
+
+
+  const current =
+    levels[level];
+
+
+  obstacleTimer =
+    setTimeout(
+      obstacleLoop,
+      current.spawn
+    );
+
+}
+
+
+/* =========================
+   SPAWN ROCK
+========================= */
 
 function spawnObstacle(){
 
   const obstacle =
-  document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   obstacle.className =
-  "obstacle";
+    "obstacle";
+
 
   const rock =
-  document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
-  let random =
-  Math.random();
 
-  if(random < .25){
+  const random =
+    Math.random();
 
-    rock.className =
-    "rock small";
 
-  }else if(random > .75){
-
-    rock.className =
-    "rock tall";
-
-  }else{
+  if(level === 1){
 
     rock.className =
-    "rock";
+      random < .5
+      ? "rock small"
+      : "rock";
 
   }
 
-  obstacle.appendChild(rock);
+
+  else if(level === 2){
+
+    rock.className =
+      random < .5
+      ? "rock"
+      : "rock tall";
+
+  }
+
+
+  else if(level === 3){
+
+    rock.className =
+      random < .4
+      ? "rock tall"
+      : "rock";
+
+  }
+
+
+  else if(level === 4){
+
+    rock.className =
+      "rock tall";
+
+  }
+
+
+  else{
+
+    rock.className =
+      random < .5
+      ? "rock tall"
+      : "rock";
+
+  }
+
+
+  obstacle.appendChild(
+    rock
+  );
+
 
   obstacle.style.left =
-  (window.innerWidth + 60) + "px";
+    (window.innerWidth + 60)
+    + "px";
 
-  game.appendChild(obstacle);
+
+  game.appendChild(
+    obstacle
+  );
+
 
   obstacles.push({
-    element: obstacle,
-    x: window.innerWidth + 60
+
+    element:obstacle,
+
+    x:window.innerWidth + 60
+
   });
+
 }
 
 
-/* ================= JUMP ================= */
+/* =========================
+   JUMP
+========================= */
 
 function jump(){
 
-  if(!running || jumping)
+  if(
+    !running ||
+    jumping
+  )
     return;
 
+
+  jumpSound();
+
+
   jumping = true;
+
+  player.classList.add(
+    "jumping"
+  );
+
 
   const start =
     performance.now();
 
-  const duration = 650;
-  const jumpHeight = 175;
 
-  function animate(time){
+  const duration =
+    650;
+
+
+  const jumpHeight =
+    175;
+
+
+  function animateJump(time){
 
     if(!running){
+
       jumping = false;
+
+      player.classList.remove(
+        "jumping"
+      );
+
       return;
+
     }
 
-    let progress =
-      (time - start) / duration;
+
+    const progress =
+      (time - start) /
+      duration;
+
 
     if(progress >= 1){
 
       player.style.bottom =
         "30%";
 
+
       jumping = false;
 
+
+      player.classList.remove(
+        "jumping"
+      );
+
+
       return;
+
     }
 
-    let height =
-      Math.sin(progress * Math.PI)
-      * jumpHeight;
+
+    const height =
+      Math.sin(
+        progress *
+        Math.PI
+      ) *
+      jumpHeight;
+
 
     player.style.bottom =
-      `calc(30% + ${height}px)`;
+      `calc(
+        30% +
+        ${height}px
+      )`;
 
-    requestAnimationFrame(animate);
+
+    requestAnimationFrame(
+      animateJump
+    );
+
   }
 
-  requestAnimationFrame(animate);
+
+  requestAnimationFrame(
+    animateJump
+  );
+
 }
 
 
-/* ================= GAME LOOP ================= */
+/* =========================
+   MAIN GAME LOOP
+========================= */
 
 function update(){
 
   if(!running)
     return;
 
+
   for(
-    let i = obstacles.length - 1;
+    let i =
+    obstacles.length - 1;
+
     i >= 0;
+
     i--
   ){
 
     const obstacle =
       obstacles[i];
 
-    obstacle.x -= speed;
+
+    obstacle.x -=
+      speed;
+
 
     obstacle.element.style.left =
       obstacle.x + "px";
 
-    if(obstacle.x < -100){
+
+    /*
+      Remove old obstacle
+    */
+
+    if(
+      obstacle.x < -100
+    ){
 
       obstacle.element.remove();
 
-      obstacles.splice(i,1);
+      obstacles.splice(
+        i,
+        1
+      );
+
 
       score++;
 
+
       scoreText.textContent =
-        "SCORE: " + score;
+        "SCORE: " +
+        score;
 
-      /* Increase difficulty */
 
-      if(score % 5 === 0){
+      scoreSound();
 
-        speed += .55;
-      }
+
+      updateLevel();
+
 
       continue;
+
     }
+
+
+    /*
+      Collision
+    */
 
     if(
       collision(
@@ -709,16 +1931,25 @@ function update(){
     ){
 
       endGame();
+
       return;
+
     }
+
   }
 
+
   animation =
-    requestAnimationFrame(update);
+    requestAnimationFrame(
+      update
+    );
+
 }
 
 
-/* ================= COLLISION ================= */
+/* =========================
+   COLLISION
+========================= */
 
 function collision(a,b){
 
@@ -728,97 +1959,145 @@ function collision(a,b){
   const r2 =
     b.getBoundingClientRect();
 
-  /* Smaller hitbox for fair gameplay */
 
-  const padding = 8;
+  const padding =
+    8;
+
 
   return !(
-    r1.right - padding < r2.left ||
-    r1.left + padding > r2.right ||
-    r1.bottom - padding < r2.top ||
-    r1.top + padding > r2.bottom
+    r1.right - padding <
+    r2.left ||
+
+    r1.left + padding >
+    r2.right ||
+
+    r1.bottom - padding <
+    r2.top ||
+
+    r1.top + padding >
+    r2.bottom
   );
+
 }
 
 
-/* ================= GAME OVER ================= */
+/* =========================
+   GAME OVER
+========================= */
 
 function endGame(){
 
   running = false;
 
-  cancelAnimationFrame(animation);
 
-  clearTimeout(obstacleTimer);
+  gameOverSound();
+
+
+  cancelAnimationFrame(
+    animation
+  );
+
+
+  clearTimeout(
+    obstacleTimer
+  );
+
 
   if(score > best){
 
     best = score;
 
+
     localStorage.setItem(
       "rockyBest",
       best
     );
+
   }
 
+
   bestText.textContent =
-    "BEST: " + best;
+    "BEST: " +
+    best;
+
 
   finalScore.textContent =
-    "SCORE: " + score;
+    "SCORE: " +
+    score;
+
 
   gameOver.style.display =
     "flex";
+
 }
 
 
-/* ================= RESTART ================= */
+/* =========================
+   RESTART
+========================= */
 
 function restartGame(){
 
   clearObstacles();
 
   startGame();
+
 }
 
 
-/* ================= CLEAR ================= */
+/* =========================
+   CLEAR OBSTACLES
+========================= */
 
 function clearObstacles(){
 
   obstacles.forEach(
-    o => o.element.remove()
+    obstacle =>
+      obstacle.element.remove()
   );
 
+
   obstacles = [];
+
 }
 
 
-/* ================= MOBILE CONTROL ================= */
+/* =========================
+   MOBILE CONTROL
+========================= */
 
 document.addEventListener(
   "touchstart",
+
   function(e){
 
     if(
       running &&
-      e.target.tagName !== "BUTTON"
+      e.target.tagName !==
+      "BUTTON"
     ){
 
       e.preventDefault();
 
       jump();
+
     }
 
   },
-  {passive:false}
+
+  {
+    passive:false
+  }
 );
 
 
-/* ================= KEYBOARD ================= */
+/* =========================
+   KEYBOARD
+========================= */
 
 document.addEventListener(
   "keydown",
+
   function(e){
 
     if(
@@ -827,6 +2106,7 @@ document.addEventListener(
     ){
 
       jump();
+
     }
 
   }
