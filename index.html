@@ -1,1057 +1,432 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width,
-initial-scale=1.0,
-maximum-scale=1.0,
-user-scalable=no">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Run Rocky Run</title>
 
 <style>
-
-/* =========================
-   RESET
-========================= */
-
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
-
   -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
-
+html,body{
   width:100%;
   height:100%;
-
   overflow:hidden;
-
   font-family:Arial,sans-serif;
-
   background:#c58b55;
-
   touch-action:manipulation;
 }
 
-
-/* =========================
-   GAME WORLD
-========================= */
-
 #game{
-
   position:relative;
-
   width:100vw;
   height:100vh;
-
   overflow:hidden;
-
-  background:
-  linear-gradient(
-    to bottom,
-    #e3b37c 0%,
-    #d9a66d 55%,
-    #c58b55 100%
-  );
+  background:linear-gradient(#e3b37c,#d9a66d 55%,#c58b55);
 }
 
-
-/* =========================
-   MOVING BACKGROUND
-========================= */
-
-#game::before{
-
+/* Moving background */
+#game:before{
   content:"";
-
   position:absolute;
-
   left:0;
   bottom:30%;
-
-  width:250%;
-
-  height:35%;
-
+  width:260%;
+  height:36%;
   background:
-
-  linear-gradient(
-    135deg,
-    transparent 35%,
-    #a86f42 35%,
-    #a86f42 50%,
-    transparent 50%
-  );
-
-  background-size:
-  260px 180px;
-
-  opacity:.42;
-
-  animation:
-  mountainsMove 14s linear infinite;
-
+    linear-gradient(
+      135deg,
+      transparent 35%,
+      #a86f42 35%,
+      #a86f42 50%,
+      transparent 50%
+    );
+  background-size:260px 180px;
+  opacity:.4;
+  animation:mountains 14s linear infinite;
   z-index:1;
 }
 
-
-#game::after{
-
+#game:after{
   content:"";
-
   position:absolute;
-
   left:0;
   bottom:30%;
-
   width:300%;
-
   height:16%;
-
   background:
-
-  radial-gradient(
-    ellipse,
-    #8c5833 0%,
-    #8c5833 45%,
-    transparent 48%
-  );
-
-  background-size:
-  180px 70px;
-
+    radial-gradient(
+      ellipse,
+      #8c5833 0 45%,
+      transparent 48%
+    );
+  background-size:180px 70px;
   opacity:.5;
-
-  animation:
-  groundObjectsMove 5s linear infinite;
-
+  animation:groundMove 5s linear infinite;
   z-index:2;
 }
 
-
-@keyframes mountainsMove{
-
-  from{
-    transform:translateX(0);
-  }
-
-  to{
-    transform:translateX(-520px);
-  }
+@keyframes mountains{
+  to{transform:translateX(-520px);}
 }
 
-
-@keyframes groundObjectsMove{
-
-  from{
-    transform:translateX(0);
-  }
-
-  to{
-    transform:translateX(-540px);
-  }
+@keyframes groundMove{
+  to{transform:translateX(-540px);}
 }
 
-
-/* =========================
-   SUN
-========================= */
+/* Sun */
 
 .sun{
-
   position:absolute;
-
   width:90px;
   height:90px;
-
   border-radius:50%;
-
   background:#ffd27d;
-
   top:8%;
   right:12%;
-
-  box-shadow:
-  0 0 40px #ffd27d;
-
+  box-shadow:0 0 40px #ffd27d;
   z-index:2;
 }
 
-
-/* =========================
-   CLOUDS
-========================= */
+/* Clouds */
 
 .cloud{
-
   position:absolute;
-
   width:100px;
   height:30px;
-
   border-radius:30px;
-
   background:#f4d3a2;
-
   opacity:.7;
-
   z-index:3;
-
-  animation:
-  cloudMove 25s linear infinite;
+  animation:cloudMove 25s linear infinite;
 }
-
 
 .cloud:before,
 .cloud:after{
-
   content:"";
-
   position:absolute;
-
   background:#f4d3a2;
-
   border-radius:50%;
 }
 
-
 .cloud:before{
-
   width:45px;
   height:45px;
-
   left:15px;
   top:-22px;
 }
 
-
 .cloud:after{
-
   width:55px;
   height:55px;
-
   right:8px;
   top:-28px;
 }
 
-
 .cloud1{
-
   top:15%;
   left:10%;
 }
 
-
 .cloud2{
-
   top:27%;
   right:25%;
-
-  transform:scale(.7);
 }
-
 
 @keyframes cloudMove{
-
-  from{
-    transform:translateX(100vw);
-  }
-
-  to{
-    transform:translateX(-250px);
-  }
+  from{transform:translateX(100vw);}
+  to{transform:translateX(-250px);}
 }
 
-
-/* =========================
-   MOUNTAINS
-========================= */
-
-.mountain{
-
-  position:absolute;
-
-  bottom:30%;
-
-  width:0;
-  height:0;
-
-  border-left:
-  100px solid transparent;
-
-  border-right:
-  100px solid transparent;
-
-  border-bottom:
-  180px solid #a86f42;
-
-  opacity:.75;
-
-  z-index:3;
-
-  animation:
-  mountainScroll 18s linear infinite;
-}
-
-
-.m1{
-  left:-20px;
-  transform:scale(1.3);
-}
-
-
-.m2{
-  left:35%;
-  transform:scale(.9);
-}
-
-
-.m3{
-  right:-20px;
-  transform:scale(1.5);
-}
-
-
-@keyframes mountainScroll{
-
-  from{
-    transform:translateX(0);
-  }
-
-  to{
-    transform:translateX(-700px);
-  }
-}
-
-
-/* =========================
-   GROUND
-========================= */
+/* Ground */
 
 #ground{
-
   position:absolute;
-
   bottom:0;
-
   width:100%;
   height:30%;
-
   background:
-
-  repeating-linear-gradient(
-    45deg,
-    #9b633a 0px,
-    #9b633a 18px,
-    #8c5833 18px,
-    #8c5833 36px
-  );
-
-  border-top:
-  8px solid #6d4328;
-
+    repeating-linear-gradient(
+      45deg,
+      #9b633a 0 18px,
+      #8c5833 18px 36px
+    );
+  border-top:8px solid #6d4328;
   z-index:6;
 }
 
+/* HUD */
 
-/* =========================
-   SCORE
-========================= */
+#score,
+#best,
+#magnitude{
+  position:absolute;
+  z-index:30;
+  color:white;
+  font-weight:bold;
+  text-shadow:2px 2px 4px #4b2d1a;
+}
 
 #score{
-
-  position:absolute;
-
   top:18px;
   left:18px;
-
-  z-index:30;
-
-  color:white;
-
   font-size:22px;
-
-  font-weight:bold;
-
-  text-shadow:
-  2px 2px 4px #4b2d1a;
 }
-
 
 #best{
-
-  position:absolute;
-
   top:18px;
   right:18px;
-
-  z-index:30;
-
-  color:white;
-
   font-size:18px;
-
-  font-weight:bold;
-
-  text-shadow:
-  2px 2px 4px #4b2d1a;
 }
 
-
-#level{
-
-  position:absolute;
-
+#magnitude{
   top:52px;
   left:18px;
-
-  z-index:30;
-
-  color:white;
-
-  font-size:17px;
-
-  font-weight:bold;
-
-  text-shadow:
-  2px 2px 4px #4b2d1a;
+  font-size:16px;
 }
 
-
-/* =========================
-   ROCKY
-========================= */
+/* Rocky */
 
 #player{
-
   position:absolute;
-
-  width:58px;
-  height:76px;
-
-  left:75px;
-
+  width:76px;
+  height:92px;
+  left:60px;
   bottom:30%;
-
   z-index:10;
-
   transform-origin:center bottom;
-
-  animation:
-  rockyBounce .28s
-  ease-in-out infinite alternate;
 }
 
-
-/* BODY */
-
-.body{
-
-  position:absolute;
-
-  width:45px;
-  height:55px;
-
-  left:7px;
-  top:18px;
-
-  background:#77736b;
-
-  border:
-  4px solid #302d29;
-
-  border-radius:
-  15px 15px 12px 12px;
+#player img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  user-select:none;
+  -webkit-user-drag:none;
 }
 
+/* Running animation */
 
-/* HEAD */
-
-.head{
-
-  position:absolute;
-
-  width:48px;
-  height:38px;
-
-  left:5px;
-  top:0;
-
-  background:#8d8980;
-
-  border:
-  4px solid #302d29;
-
-  border-radius:
-  15px 15px 12px 12px;
-
-  animation:
-  headMove .35s
-  ease-in-out infinite alternate;
+.running{
+  animation:rockyRun .25s ease-in-out infinite alternate;
 }
 
-
-/* EYES */
-
-.eye{
-
-  position:absolute;
-
-  width:7px;
-  height:7px;
-
-  border-radius:50%;
-
-  background:#252321;
-
-  top:14px;
-}
-
-
-.e1{
-  left:14px;
-}
-
-
-.e2{
-  right:14px;
-}
-
-
-/* CRYSTALS */
-
-.crystal{
-
-  position:absolute;
-
-  width:15px;
-  height:20px;
-
-  background:#b76f3b;
-
-  border:
-  3px solid #302d29;
-
-  transform:rotate(25deg);
-
-  z-index:4;
-}
-
-
-.c1{
-
-  left:-7px;
-  top:17px;
-}
-
-
-.c2{
-
-  right:-7px;
-  top:17px;
-}
-
-
-.c3{
-
-  left:19px;
-  top:-8px;
-
-  transform:rotate(0);
-}
-
-
-/* ARMS */
-
-.arm{
-
-  position:absolute;
-
-  width:17px;
-  height:35px;
-
-  background:#807b72;
-
-  border:
-  4px solid #302d29;
-
-  border-radius:12px;
-
-  top:30px;
-}
-
-
-.arm.left{
-
-  left:-7px;
-
-  transform:rotate(25deg);
-
-  transform-origin:top center;
-
-  animation:
-  armLeft .28s
-  linear infinite alternate;
-}
-
-
-.arm.right{
-
-  right:-7px;
-
-  transform:rotate(-25deg);
-
-  transform-origin:top center;
-
-  animation:
-  armRight .28s
-  linear infinite alternate;
-}
-
-
-/* LEGS */
-
-.leg{
-
-  position:absolute;
-
-  width:18px;
-  height:30px;
-
-  background:#69655e;
-
-  border:
-  4px solid #302d29;
-
-  border-radius:8px;
-
-  bottom:-22px;
-
-  transform-origin:top center;
-}
-
-
-.leg.left{
-
-  left:10px;
-
-  animation:
-  legLeft .28s
-  linear infinite alternate;
-}
-
-
-.leg.right{
-
-  right:10px;
-
-  animation:
-  legRight .28s
-  linear infinite alternate;
-}
-
-
-/* RUN ANIMATIONS */
-
-@keyframes rockyBounce{
-
+@keyframes rockyRun{
   from{
-    transform:
-    translateY(0)
-    rotate(-2deg);
+    transform:translateY(0) rotate(-2deg);
   }
-
   to{
-    transform:
-    translateY(-5px)
-    rotate(2deg);
+    transform:translateY(-4px) rotate(2deg);
   }
 }
 
+/* Jump */
 
-@keyframes headMove{
-
-  from{
-    transform:translateY(0);
-  }
-
-  to{
-    transform:translateY(-2px);
-  }
+.jumping{
+  animation:none !important;
 }
 
-
-@keyframes legLeft{
-
-  from{
-    transform:rotate(25deg);
-  }
-
-  to{
-    transform:rotate(-25deg);
-  }
+.jumping img{
+  transform:rotate(-6deg) scale(1.04);
 }
 
-
-@keyframes legRight{
-
-  from{
-    transform:rotate(-25deg);
-  }
-
-  to{
-    transform:rotate(25deg);
-  }
-}
-
-
-@keyframes armLeft{
-
-  from{
-    transform:rotate(-25deg);
-  }
-
-  to{
-    transform:rotate(25deg);
-  }
-}
-
-
-@keyframes armRight{
-
-  from{
-    transform:rotate(25deg);
-  }
-
-  to{
-    transform:rotate(-25deg);
-  }
-}
-
-
-/* =========================
-   JUMP STATE
-========================= */
-
-#player.jumping{
-
-  animation:none;
-}
-
-
-#player.jumping .leg,
-#player.jumping .arm{
-
-  animation:none;
-}
-
-
-#player.jumping .leg.left{
-
-  transform:rotate(35deg);
-}
-
-
-#player.jumping .leg.right{
-
-  transform:rotate(-35deg);
-}
-
-
-#player.jumping .arm.left{
-
-  transform:rotate(-40deg);
-}
-
-
-#player.jumping .arm.right{
-
-  transform:rotate(40deg);
-}
-
-
-/* =========================
-   OBSTACLES
-========================= */
+/* Obstacles */
 
 .obstacle{
-
   position:absolute;
-
   bottom:30%;
-
   z-index:8;
 }
 
-
 .rock{
-
   width:50px;
   height:48px;
-
   background:#765039;
-
-  border:
-  5px solid #3d2a1d;
-
-  border-radius:
-  45% 55% 35% 50%;
-
-  transform:rotate(-8deg);
-
+  border:5px solid #3d2a1d;
+  border-radius:45% 55% 35% 50%;
   box-shadow:
-
-  inset 10px 8px 0 #987052,
-
-  inset -8px -8px 0 #543723;
+    inset 10px 8px #987052,
+    inset -8px -8px #543723;
 }
 
-
-.rock.small{
-
+.small{
   width:38px;
   height:35px;
 }
 
-
-.rock.tall{
-
+.tall{
   width:45px;
   height:75px;
-
-  border-radius:
-  50% 40% 20% 30%;
-
-  transform:rotate(5deg);
 }
 
+/* Flying obstacles */
 
-/* =========================
-   OVERLAYS
-========================= */
+.flying{
+  bottom:auto;
+  top:40%;
+  z-index:9;
+}
+
+.flying .rock{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  animation:flyingRock .35s ease-in-out infinite alternate;
+}
+
+.flying:after{
+  content:"";
+  position:absolute;
+  left:-34px;
+  top:20px;
+  width:35px;
+  height:5px;
+  background:#d8b18a;
+  opacity:.7;
+}
+
+@keyframes flyingRock{
+  from{
+    transform:translateY(-5px) rotate(-10deg);
+  }
+  to{
+    transform:translateY(5px) rotate(10deg);
+  }
+}
+
+/* Hint */
+
+#hint{
+  position:absolute;
+  bottom:18px;
+  width:100%;
+  text-align:center;
+  z-index:25;
+  color:white;
+  font-size:15px;
+  font-weight:bold;
+  text-shadow:2px 2px 3px #4b2d1a;
+}
+
+/* Screens */
 
 .overlay{
-
   position:absolute;
-
   inset:0;
-
   z-index:50;
-
   display:flex;
-
   flex-direction:column;
-
   justify-content:center;
-
   align-items:center;
-
   text-align:center;
-
   color:white;
-
-  background:
-  rgba(55,32,20,.68);
+  background:rgba(55,32,20,.72);
+  padding:20px;
 }
 
+.title{
+  font-size:45px;
+  line-height:.95;
+  font-weight:900;
+  color:#f4c27b;
+  text-shadow:
+    4px 4px #4b2b19,
+    7px 7px #24160e;
+  margin-bottom:15px;
+}
 
-#gameOver{
+.subtitle,
+.result{
+  margin-bottom:20px;
+  font-size:18px;
+  line-height:1.5;
+}
 
+.result{
+  font-weight:bold;
+}
+
+button{
+  border:4px solid #4b2b19;
+  background:#b96d32;
+  color:white;
+  padding:15px 38px;
+  border-radius:15px;
+  font-size:21px;
+  font-weight:bold;
+  box-shadow:0 6px #4b2b19;
+}
+
+button:active{
+  transform:translateY(5px);
+  box-shadow:0 1px #4b2b19;
+}
+
+#gameOver,
+#completed{
   display:none;
 }
 
-
-.title{
-
-  font-size:46px;
-
-  line-height:.95;
-
-  font-weight:900;
-
-  color:#f4c27b;
-
-  text-shadow:
-
-  4px 4px 0 #4b2b19,
-
-  7px 7px 0 #24160e;
-
-  margin-bottom:12px;
-}
-
-
-.subtitle{
-
-  font-size:17px;
-
-  margin-bottom:18px;
-}
-
-
-button{
-
-  border:
-  4px solid #4b2b19;
-
-  background:#b96d32;
-
-  color:white;
-
-  padding:
-  15px 38px;
-
-  border-radius:15px;
-
-  font-size:21px;
-
-  font-weight:bold;
-
-  box-shadow:
-  0 6px 0 #4b2b19;
-}
-
-
-button:active{
-
-  transform:translateY(5px);
-
-  box-shadow:
-  0 1px 0 #4b2b19;
-}
-
-
-/* =========================
-   HINT
-========================= */
-
-#hint{
-
-  position:absolute;
-
-  bottom:18px;
-
-  width:100%;
-
-  text-align:center;
-
-  z-index:25;
-
-  color:white;
-
-  font-size:15px;
-
-  font-weight:bold;
-
-  text-shadow:
-  2px 2px 3px #4b2d1a;
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
 @media(max-width:500px){
 
-  .title{
-    font-size:40px;
-  }
-
   #player{
-    left:55px;
+    left:48px;
+    width:72px;
+    height:88px;
   }
 
-  #score{
-    font-size:19px;
+  .title{
+    font-size:39px;
   }
 
-  #best{
-    font-size:16px;
-  }
-
-  #level{
-    font-size:15px;
-  }
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <div id="game">
-
-
-  <!-- BACKGROUND -->
 
   <div class="sun"></div>
 
   <div class="cloud cloud1"></div>
   <div class="cloud cloud2"></div>
 
-  <div class="mountain m1"></div>
-  <div class="mountain m2"></div>
-  <div class="mountain m3"></div>
-
-
   <!-- HUD -->
 
-  <div id="score">
-    SCORE: 0
-  </div>
+  <div id="score">SCORE: 0</div>
 
-  <div id="best">
-    BEST: 0
-  </div>
+  <div id="best">BEST: 0</div>
 
-  <div id="level">
-    LEVEL 1 • DESERT
+  <div id="magnitude">
+    MAGNITUDE 1 • DESERT
   </div>
-
 
   <!-- ROCKY -->
 
-  <div id="player">
+  <div id="player" class="running">
 
-    <div class="head">
-
-      <div class="eye e1"></div>
-      <div class="eye e2"></div>
-
-    </div>
-
-    <div class="crystal c1"></div>
-    <div class="crystal c2"></div>
-    <div class="crystal c3"></div>
-
-    <div class="body"></div>
-
-    <div class="arm left"></div>
-    <div class="arm right"></div>
-
-    <div class="leg left"></div>
-    <div class="leg right"></div>
+    <img
+      id="rockySprite"
+      src="R1.png"
+      alt="Rocky"
+    >
 
   </div>
 
-
-  <!-- GROUND -->
+  <!-- Ground -->
 
   <div id="ground"></div>
+
+  <div id="hint">
+    TAP ANYWHERE TO JUMP
+  </div>
 
 
   <!-- START SCREEN -->
@@ -1059,24 +434,18 @@ button:active{
   <div id="startScreen" class="overlay">
 
     <div class="title">
-
       RUN<br>
       ROCKY<br>
       RUN
-
     </div>
 
     <div class="subtitle">
-
-      Jump over the rocks<br>
-      and survive!
-
+      Reach MAGNITUDE 9.<br>
+      Flying rocks begin at MAGNITUDE 3.
     </div>
 
     <button onclick="startGame()">
-
       PLAY
-
     </button>
 
   </div>
@@ -1087,67 +456,82 @@ button:active{
   <div id="gameOver" class="overlay">
 
     <div class="title">
-
       GAME<br>
       OVER
-
     </div>
 
-    <div id="finalScore">
-
+    <div id="finalScore" class="result">
       SCORE: 0
-
     </div>
 
-    <button onclick="buttonSound(); restartGame()">
-
+    <button onclick="startGame()">
       RUN AGAIN
-
     </button>
 
   </div>
 
 
-  <div id="hint">
+  <!-- COMPLETED -->
 
-    TAP ANYWHERE TO JUMP
+  <div id="completed" class="overlay">
+
+    <div class="title">
+      ALL<br>
+      MAGNITUDES<br>
+      COMPLETED!
+    </div>
+
+    <div id="completeScore" class="result">
+      ROCKY MASTERED THE RUN!
+    </div>
+
+    <button onclick="startGame()">
+      RUN AGAIN
+    </button>
 
   </div>
-
 
 </div>
 
 
-
 <script>
 
-/* =========================
+/* ==========================
    GAME VARIABLES
-========================= */
+========================== */
 
 const game =
-document.getElementById("game");
+  document.getElementById("game");
 
 const player =
-document.getElementById("player");
+  document.getElementById("player");
+
+const rockySprite =
+  document.getElementById("rockySprite");
 
 const scoreText =
-document.getElementById("score");
+  document.getElementById("score");
 
 const bestText =
-document.getElementById("best");
+  document.getElementById("best");
 
-const levelText =
-document.getElementById("level");
+const magnitudeText =
+  document.getElementById("magnitude");
 
 const startScreen =
-document.getElementById("startScreen");
+  document.getElementById("startScreen");
 
-const gameOver =
-document.getElementById("gameOver");
+const gameOverScreen =
+  document.getElementById("gameOver");
+
+const completedScreen =
+  document.getElementById("completed");
 
 const finalScore =
-document.getElementById("finalScore");
+  document.getElementById("finalScore");
+
+const completeScore =
+  document.getElementById("completeScore");
 
 
 let running = false;
@@ -1156,358 +540,345 @@ let jumping = false;
 
 let score = 0;
 
-let level = 1;
+let magnitude = 1;
 
 let speed = 6;
 
 let obstacles = [];
 
-let animation;
+let animationFrame;
 
 let obstacleTimer;
 
+let spriteTimer;
 
-/* =========================
+let jumpAnimation;
+
+
+/* ==========================
    BEST SCORE
-========================= */
+========================== */
 
 let best =
-Number(
-  localStorage.getItem("rockyBest")
-) || 0;
+  Number(
+    localStorage.getItem("rockyBest") || 0
+  );
 
 bestText.textContent =
-"BEST: " + best;
+  "BEST: " + best;
 
 
-/* =========================
-   LEVEL SETTINGS
-========================= */
+/* ==========================
+   MAGNITUDE SETTINGS
+========================== */
 
-const levels = {
+const magnitudes = {
 
   1:{
     name:"DESERT",
     speed:6,
-    spawn:1700,
-    background:"#e3b37c"
+    spawn:1550,
+    color:"#e3b37c",
+    flying:0
   },
 
   2:{
     name:"ROCKY VALLEY",
-    speed:7,
-    spawn:1500,
-    background:"#c99563"
+    speed:6.5,
+    spawn:1450,
+    color:"#c99563",
+    flying:0
   },
 
   3:{
     name:"CANYON",
-    speed:8,
-    spawn:1300,
-    background:"#b87545"
+    speed:7,
+    spawn:1350,
+    color:"#b87545",
+    flying:.20
   },
 
   4:{
-    name:"LAVA ROCK",
-    speed:9,
-    spawn:1100,
-    background:"#8f4d38"
+    name:"HIGH CANYON",
+    speed:7.5,
+    spawn:1280,
+    color:"#aa6842",
+    flying:.25
   },
 
   5:{
-    name:"DARK MOUNTAIN",
+    name:"LAVA ROCK",
+    speed:8,
+    spawn:1200,
+    color:"#95513d",
+    flying:.30
+  },
+
+  6:{
+    name:"FIRE VALLEY",
+    speed:8.5,
+    spawn:1120,
+    color:"#83473b",
+    flying:.35
+  },
+
+  7:{
+    name:"DARK RIDGE",
+    speed:9,
+    spawn:1050,
+    color:"#704844",
+    flying:.40
+  },
+
+  8:{
+    name:"STORM MOUNTAIN",
+    speed:9.5,
+    spawn:980,
+    color:"#5e4c4d",
+    flying:.45
+  },
+
+  9:{
+    name:"ROCKY FINAL",
     speed:10,
-    spawn:950,
-    background:"#604b45"
+    spawn:900,
+    color:"#4b4148",
+    flying:.50
   }
 
 };
 
 
-/* =========================
-   AUDIO
-========================= */
+/* ==========================
+   SOUND
+========================== */
 
-let audioCtx;
+let audioContext = null;
 
 
 function initAudio(){
 
-  if(!audioCtx){
+  if(!audioContext){
 
-    audioCtx =
-    new (
-      window.AudioContext ||
-      window.webkitAudioContext
-    )();
+    audioContext =
+      new(
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
 
   }
 
   if(
-    audioCtx.state ===
+    audioContext.state ===
     "suspended"
   ){
 
-    audioCtx.resume();
+    audioContext.resume();
 
   }
+
 }
 
 
 function playTone(
   frequency,
-  duration,
+  duration=.08,
   type="square",
-  volume=.06
+  volume=.05
 ){
 
-  if(!audioCtx)
+  if(!audioContext){
     return;
+  }
 
   const oscillator =
-    audioCtx.createOscillator();
+    audioContext.createOscillator();
 
   const gain =
-    audioCtx.createGain();
+    audioContext.createGain();
 
 
   oscillator.type =
     type;
 
-  oscillator.frequency.setValueAtTime(
-    frequency,
-    audioCtx.currentTime
-  );
+  oscillator.frequency.value =
+    frequency;
 
 
   gain.gain.setValueAtTime(
     volume,
-    audioCtx.currentTime
+    audioContext.currentTime
   );
 
 
   gain.gain.exponentialRampToValueAtTime(
     .001,
-    audioCtx.currentTime +
-    duration
+    audioContext.currentTime + duration
   );
 
 
   oscillator.connect(gain);
 
   gain.connect(
-    audioCtx.destination
+    audioContext.destination
   );
 
 
   oscillator.start();
 
   oscillator.stop(
-    audioCtx.currentTime +
+    audioContext.currentTime +
     duration
   );
 
 }
 
 
-/* START */
-
-function startSound(){
+function sound(notes){
 
   initAudio();
 
-  playTone(
-    440,
-    .08,
-    "square",
-    .06
-  );
+  notes.forEach(
+    (note,index)=>{
 
-  setTimeout(
-    () => {
+      setTimeout(
+        ()=>{
 
-      playTone(
-        660,
-        .12,
-        "square",
-        .07
+          playTone(
+            note[0],
+            note[1],
+            note[2] || "square",
+            note[3] || .05
+          );
+
+        },
+        index * 90
       );
 
-    },
-    90
+    }
   );
 
 }
 
 
-/* JUMP */
+/* ==========================
+   SET MAGNITUDE
+========================== */
 
-function jumpSound(){
+function updateMagnitude(){
 
-  initAudio();
+  if(score <= 15){
 
-  playTone(
-    420,
-    .08,
-    "square",
-    .05
-  );
+    magnitude = 1;
 
-  setTimeout(
-    () => {
+  }
+  else if(score <= 30){
 
-      playTone(
-        620,
-        .10,
-        "square",
-        .05
-      );
+    magnitude = 2;
 
-    },
-    60
-  );
+  }
+  else if(score <= 45){
 
-}
+    magnitude = 3;
 
+  }
+  else if(score <= 60){
 
-/* SCORE */
+    magnitude = 4;
 
-function scoreSound(){
+  }
+  else if(score <= 75){
 
-  initAudio();
+    magnitude = 5;
 
-  playTone(
-    700,
-    .06,
-    "sine",
-    .05
-  );
+  }
+  else if(score <= 90){
 
-  setTimeout(
-    () => {
+    magnitude = 6;
 
-      playTone(
-        900,
-        .08,
-        "sine",
-        .05
-      );
+  }
+  else if(score <= 105){
 
-    },
-    60
-  );
+    magnitude = 7;
 
-}
+  }
+  else if(score <= 120){
+
+    magnitude = 8;
+
+  }
+  else{
+
+    magnitude = 9;
+
+  }
 
 
-/* LEVEL UP */
+  const current =
+    magnitudes[magnitude];
 
-function levelUpSound(){
 
-  initAudio();
+  speed =
+    current.speed;
 
-  playTone(
-    520,
-    .08,
-    "square",
-    .06
-  );
 
-  setTimeout(
-    () => {
+  magnitudeText.textContent =
+    "MAGNITUDE " +
+    magnitude +
+    " • " +
+    current.name;
 
-      playTone(
-        700,
-        .08,
-        "square",
-        .06
-      );
 
-    },
-    100
-  );
-
-  setTimeout(
-    () => {
-
-      playTone(
-        900,
-        .15,
-        "square",
-        .07
-      );
-
-    },
-    200
-  );
+  game.style.background =
+    "linear-gradient(" +
+    "to bottom," +
+    current.color +
+    " 0%," +
+    current.color +
+    " 55%," +
+    "#8c5833 100%)";
 
 }
 
 
-/* GAME OVER */
-
-function gameOverSound(){
-
-  initAudio();
-
-  playTone(
-    300,
-    .15,
-    "sawtooth",
-    .07
-  );
-
-  setTimeout(
-    () => {
-
-      playTone(
-        180,
-        .25,
-        "sawtooth",
-        .06
-      );
-
-    },
-    160
-  );
-
-}
-
-
-/* BUTTON */
-
-function buttonSound(){
-
-  initAudio();
-
-  playTone(
-    520,
-    .07,
-    "square",
-    .05
-  );
-
-}
-
-
-/* =========================
-   START GAME
-========================= */
+/* ==========================
+   START
+========================== */
 
 function startGame(){
 
-  startSound();
+  initAudio();
+
+  sound([
+    [440,.08],
+    [660,.12]
+  ]);
+
 
   startScreen.style.display =
     "none";
 
-  gameOver.style.display =
+  gameOverScreen.style.display =
     "none";
+
+  completedScreen.style.display =
+    "none";
+
+
+  clearObstacles();
+
+  clearTimeout(
+    obstacleTimer
+  );
+
+  cancelAnimationFrame(
+    animationFrame
+  );
 
 
   score = 0;
 
-  level = 1;
+  magnitude = 1;
 
   speed = 6;
 
@@ -1516,210 +887,190 @@ function startGame(){
   jumping = false;
 
 
+  player.className =
+    "running";
+
+
+  player.style.bottom =
+    "30%";
+
+
   scoreText.textContent =
     "SCORE: 0";
 
 
-  updateLevel();
+  updateMagnitude();
 
-  clearObstacles();
+  startRunningAnimation();
 
-  spawnObstacle();
-
-
-  obstacleTimer =
-    setTimeout(
-      obstacleLoop,
-      levels[1].spawn
-    );
+  obstacleLoop();
 
 
-  animation =
+  animationFrame =
     requestAnimationFrame(
-      update
+      updateGame
     );
 
 }
 
 
-/* =========================
-   LEVEL UPDATE
-========================= */
+/* ==========================
+   RUNNING SPRITE ANIMATION
+========================== */
 
-function updateLevel(){
+function startRunningAnimation(){
 
-  const oldLevel =
-    level;
-
-
-  if(score <= 15){
-
-    level = 1;
-
-  }
-
-  else if(score <= 30){
-
-    level = 2;
-
-  }
-
-  else if(score <= 45){
-
-    level = 3;
-
-  }
-
-  else if(score <= 60){
-
-    level = 4;
-
-  }
-
-  else{
-
-    level = 5;
-
-  }
+  clearInterval(
+    spriteTimer
+  );
 
 
-  const current =
-    levels[level];
+  let frame = 1;
 
 
-  levelText.textContent =
-    "LEVEL " +
-    level +
-    " • " +
-    current.name;
+  spriteTimer =
+    setInterval(
+      ()=>{
+
+        if(
+          running &&
+          !jumping
+        ){
+
+          frame++;
+
+          if(frame > 4){
+
+            frame = 1;
+
+          }
 
 
-  speed =
-    current.speed;
+          rockySprite.src =
+            "R" + frame + ".png";
 
+        }
 
-  /*
-    Change sky according
-    to level.
-  */
-
-  game.style.background =
-  `linear-gradient(
-    to bottom,
-    ${current.background} 0%,
-    ${current.background} 55%,
-    #8c5833 100%
-  )`;
-
-
-  if(
-    running &&
-    level > oldLevel
-  ){
-
-    levelUpSound();
-
-  }
+      },
+      110
+    );
 
 }
 
 
-/* =========================
+/* ==========================
    OBSTACLE LOOP
-========================= */
+========================== */
 
 function obstacleLoop(){
 
-  if(!running)
+  if(!running){
+
     return;
+
+  }
 
 
   spawnObstacle();
 
 
   const current =
-    levels[level];
+    magnitudes[magnitude];
+
+
+  const randomDelay =
+    Math.random() * 220 - 80;
 
 
   obstacleTimer =
     setTimeout(
       obstacleLoop,
-      current.spawn
+      Math.max(
+        650,
+        current.spawn +
+        randomDelay
+      )
     );
 
 }
 
 
-/* =========================
-   SPAWN ROCK
-========================= */
+/* ==========================
+   CREATE OBSTACLE
+========================== */
 
 function spawnObstacle(){
 
   const obstacle =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
+
+
+  const current =
+    magnitudes[magnitude];
+
+
+  const isFlying =
+    magnitude >= 3 &&
+    Math.random() <
+    current.flying;
 
 
   obstacle.className =
-    "obstacle";
+    isFlying
+      ? "obstacle flying"
+      : "obstacle";
 
 
   const rock =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
 
-  const random =
-    Math.random();
-
-
-  if(level === 1){
+  if(isFlying){
 
     rock.className =
-      random < .5
-      ? "rock small"
-      : "rock";
+      "rock";
+
+
+    obstacle.style.top =
+      (
+        37 +
+        Math.random() * 15
+      ) + "%";
 
   }
-
-
-  else if(level === 2){
-
-    rock.className =
-      random < .5
-      ? "rock"
-      : "rock tall";
-
-  }
-
-
-  else if(level === 3){
-
-    rock.className =
-      random < .4
-      ? "rock tall"
-      : "rock";
-
-  }
-
-
-  else if(level === 4){
-
-    rock.className =
-      "rock tall";
-
-  }
-
 
   else{
 
-    rock.className =
-      random < .5
-      ? "rock tall"
-      : "rock";
+    const random =
+      Math.random();
+
+
+    if(magnitude <= 2){
+
+      rock.className =
+        random < .55
+          ? "rock small"
+          : "rock";
+
+    }
+
+    else if(magnitude <= 4){
+
+      rock.className =
+        random < .45
+          ? "rock"
+          : "rock tall";
+
+    }
+
+    else{
+
+      rock.className =
+        random < .25
+          ? "rock"
+          : "rock tall";
+
+    }
 
   }
 
@@ -1730,8 +1081,10 @@ function spawnObstacle(){
 
 
   obstacle.style.left =
-    (window.innerWidth + 60)
-    + "px";
+    (
+      window.innerWidth +
+      70
+    ) + "px";
 
 
   game.appendChild(
@@ -1743,34 +1096,47 @@ function spawnObstacle(){
 
     element:obstacle,
 
-    x:window.innerWidth + 60
+    x:
+      window.innerWidth +
+      70,
+
+    passed:false
 
   });
 
 }
 
 
-/* =========================
+/* ==========================
    JUMP
-========================= */
+========================== */
 
 function jump(){
 
   if(
     !running ||
     jumping
-  )
+  ){
+
     return;
 
+  }
 
-  jumpSound();
+
+  initAudio();
+
+
+  sound([
+    [420,.08],
+    [620,.10]
+  ]);
 
 
   jumping = true;
 
-  player.classList.add(
-    "jumping"
-  );
+
+  player.className =
+    "jumping";
 
 
   const start =
@@ -1781,19 +1147,13 @@ function jump(){
     650;
 
 
-  const jumpHeight =
+  const height =
     175;
 
 
-  function animateJump(time){
+  function jumpLoop(time){
 
     if(!running){
-
-      jumping = false;
-
-      player.classList.remove(
-        "jumping"
-      );
 
       return;
 
@@ -1801,8 +1161,10 @@ function jump(){
 
 
     const progress =
-      (time - start) /
-      duration;
+      (
+        time -
+        start
+      ) / duration;
 
 
     if(progress >= 1){
@@ -1814,9 +1176,8 @@ function jump(){
       jumping = false;
 
 
-      player.classList.remove(
-        "jumping"
-      );
+      player.className =
+        "running";
 
 
       return;
@@ -1824,48 +1185,92 @@ function jump(){
     }
 
 
-    const height =
+    const jumpHeight =
       Math.sin(
         progress *
         Math.PI
-      ) *
-      jumpHeight;
+      ) * height;
 
 
     player.style.bottom =
-      `calc(
-        30% +
-        ${height}px
-      )`;
+      "calc(30% + " +
+      jumpHeight +
+      "px)";
 
 
-    requestAnimationFrame(
-      animateJump
-    );
+    jumpAnimation =
+      requestAnimationFrame(
+        jumpLoop
+      );
 
   }
 
 
-  requestAnimationFrame(
-    animateJump
+  jumpAnimation =
+    requestAnimationFrame(
+      jumpLoop
+    );
+
+}
+
+
+/* ==========================
+   COLLISION
+========================== */
+
+function checkCollision(
+  playerElement,
+  obstacleElement
+){
+
+  const playerRect =
+    playerElement.getBoundingClientRect();
+
+  const obstacleRect =
+    obstacleElement.getBoundingClientRect();
+
+
+  const padding =
+    10;
+
+
+  return !(
+    playerRect.right -
+      padding <
+      obstacleRect.left ||
+
+    playerRect.left +
+      padding >
+      obstacleRect.right ||
+
+    playerRect.bottom -
+      padding <
+      obstacleRect.top ||
+
+    playerRect.top +
+      padding >
+      obstacleRect.bottom
   );
 
 }
 
 
-/* =========================
+/* ==========================
    MAIN GAME LOOP
-========================= */
+========================== */
 
-function update(){
+function updateGame(){
 
-  if(!running)
+  if(!running){
+
     return;
+
+  }
 
 
   for(
     let i =
-    obstacles.length - 1;
+      obstacles.length - 1;
 
     i >= 0;
 
@@ -1884,20 +1289,16 @@ function update(){
       obstacle.x + "px";
 
 
-    /*
-      Remove old obstacle
-    */
+    /* Score */
 
     if(
-      obstacle.x < -100
+      !obstacle.passed &&
+      obstacle.x <
+        player.offsetLeft - 35
     ){
 
-      obstacle.element.remove();
-
-      obstacles.splice(
-        i,
-        1
-      );
+      obstacle.passed =
+        true;
 
 
       score++;
@@ -1908,29 +1309,75 @@ function update(){
         score;
 
 
-      scoreSound();
+      sound([
+        [700,.05,"sine"],
+        [900,.07,"sine"]
+      ]);
 
 
-      updateLevel();
+      const oldMagnitude =
+        magnitude;
 
+
+      updateMagnitude();
+
+
+      if(
+        magnitude >
+        oldMagnitude
+      ){
+
+        sound([
+          [520,.08],
+          [700,.08],
+          [900,.14]
+        ]);
+
+      }
+
+    }
+
+
+    /* Magnitude 9 completed */
+
+    if(score >= 135){
+
+      completeGame();
+
+      return;
+
+    }
+
+
+    /* Remove obstacle */
+
+    if(
+      obstacle.x <
+      -130
+    ){
+
+      obstacle.element.remove();
+
+      obstacles.splice(
+        i,
+        1
+      );
 
       continue;
 
     }
 
 
-    /*
-      Collision
-    */
+    /* Collision */
 
     if(
-      collision(
+      checkCollision(
         player,
         obstacle.element
       )
     ){
 
-      endGame();
+      gameOver();
 
       return;
 
@@ -1939,68 +1386,47 @@ function update(){
   }
 
 
-  animation =
+  animationFrame =
     requestAnimationFrame(
-      update
+      updateGame
     );
 
 }
 
 
-/* =========================
-   COLLISION
-========================= */
-
-function collision(a,b){
-
-  const r1 =
-    a.getBoundingClientRect();
-
-  const r2 =
-    b.getBoundingClientRect();
-
-
-  const padding =
-    8;
-
-
-  return !(
-    r1.right - padding <
-    r2.left ||
-
-    r1.left + padding >
-    r2.right ||
-
-    r1.bottom - padding <
-    r2.top ||
-
-    r1.top + padding >
-    r2.bottom
-  );
-
-}
-
-
-/* =========================
+/* ==========================
    GAME OVER
-========================= */
+========================== */
 
-function endGame(){
+function gameOver(){
 
   running = false;
 
 
-  gameOverSound();
+  clearInterval(
+    spriteTimer
+  );
 
 
   cancelAnimationFrame(
-    animation
+    animationFrame
+  );
+
+
+  cancelAnimationFrame(
+    jumpAnimation
   );
 
 
   clearTimeout(
     obstacleTimer
   );
+
+
+  sound([
+    [300,.15,"sawtooth",.06],
+    [180,.25,"sawtooth",.05]
+  ]);
 
 
   if(score > best){
@@ -2023,37 +1449,95 @@ function endGame(){
 
   finalScore.textContent =
     "SCORE: " +
-    score;
+    score +
+    " • MAGNITUDE " +
+    magnitude;
 
 
-  gameOver.style.display =
+  gameOverScreen.style.display =
     "flex";
 
 }
 
 
-/* =========================
-   RESTART
-========================= */
+/* ==========================
+   COMPLETED
+========================== */
 
-function restartGame(){
+function completeGame(){
 
-  clearObstacles();
+  running = false;
 
-  startGame();
+
+  clearInterval(
+    spriteTimer
+  );
+
+
+  cancelAnimationFrame(
+    animationFrame
+  );
+
+
+  cancelAnimationFrame(
+    jumpAnimation
+  );
+
+
+  clearTimeout(
+    obstacleTimer
+  );
+
+
+  sound([
+    [660,.16,"sine",.07],
+    [780,.16,"sine",.07],
+    [900,.16,"sine",.07],
+    [1100,.20,"sine",.08]
+  ]);
+
+
+  if(score > best){
+
+    best = score;
+
+
+    localStorage.setItem(
+      "rockyBest",
+      best
+    );
+
+  }
+
+
+  bestText.textContent =
+    "BEST: " +
+    best;
+
+
+  completeScore.textContent =
+    "MAGNITUDE 9 COMPLETED • SCORE: " +
+    score;
+
+
+  completedScreen.style.display =
+    "flex";
 
 }
 
 
-/* =========================
+/* ==========================
    CLEAR OBSTACLES
-========================= */
+========================== */
 
 function clearObstacles(){
 
   obstacles.forEach(
-    obstacle =>
-      obstacle.element.remove()
+    obstacle => {
+
+      obstacle.element.remove();
+
+    }
   );
 
 
@@ -2062,47 +1546,44 @@ function clearObstacles(){
 }
 
 
-/* =========================
-   MOBILE CONTROL
-========================= */
+/* ==========================
+   MOBILE TOUCH
+========================== */
 
 document.addEventListener(
   "touchstart",
-
-  function(e){
+  function(event){
 
     if(
       running &&
-      e.target.tagName !==
+      event.target.tagName !==
       "BUTTON"
     ){
 
-      e.preventDefault();
+      event.preventDefault();
 
       jump();
 
     }
 
   },
-
   {
     passive:false
   }
 );
 
 
-/* =========================
+/* ==========================
    KEYBOARD
-========================= */
+========================== */
 
 document.addEventListener(
   "keydown",
-
-  function(e){
+  function(event){
 
     if(
-      e.code === "Space" ||
-      e.code === "ArrowUp"
+      event.code === "Space" ||
+      event.code === "ArrowUp"
     ){
 
       jump();
