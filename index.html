@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width,
-      initial-scale=1.0,
-      maximum-scale=1.0,
-      user-scalable=no">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
 
 <title>Run Rocky Run</title>
 
@@ -29,14 +28,14 @@ body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#2d2118;
+  background:#241a14;
   font-family:Arial,sans-serif;
   touch-action:manipulation;
 }
 
 
 /* =====================================================
-   16:9 GAME DISPLAY
+   16:9 GAME WRAPPER
 ===================================================== */
 
 #gameWrapper{
@@ -51,18 +50,18 @@ body{
   align-items:center;
   justify-content:center;
 
-  background:#2d2118;
+  background:#241a14;
 
 }
 
 
+/* =====================================================
+   GAME
+===================================================== */
+
 #game{
 
   position:relative;
-
-  /*
-     TRUE 16:9 GAME
-  */
 
   width:min(100vw,177.7778vh);
 
@@ -94,11 +93,9 @@ body{
   position:absolute;
 
   left:0;
-
   bottom:30%;
 
   width:260%;
-
   height:36%;
 
   background:
@@ -132,11 +129,9 @@ body{
   position:absolute;
 
   left:0;
-
   bottom:30%;
 
   width:300%;
-
   height:16%;
 
   background:
@@ -391,18 +386,13 @@ body{
    ROCKY
 ===================================================== */
 
-/*
-   IMPORTANT:
-
-   The image has transparent space under the feet.
-
-   Therefore Rocky is moved slightly downward
-   so the actual FEET touch the ground line.
-
-   Change --feetCorrection if needed.
-*/
-
 #player{
+
+  /*
+     This correction compensates for
+     transparent pixels underneath
+     your Rocky sprite.
+  */
 
   --feetCorrection:10px;
 
@@ -411,13 +401,10 @@ body{
   width:76px;
   height:92px;
 
-  left:60px;
+  left:7%;
 
   /*
-     Ground begins at 30%.
-
-     Extra correction pushes the visible
-     feet exactly onto the ground line.
+     Feet sit exactly around ground line.
   */
 
   bottom:
@@ -448,7 +435,7 @@ body{
 
 
 /* =====================================================
-   RUNNING ANIMATION
+   RUNNING
 ===================================================== */
 
 .running{
@@ -485,7 +472,7 @@ body{
 
 
 /* =====================================================
-   JUMPING
+   JUMP
 ===================================================== */
 
 .jumping{
@@ -568,10 +555,10 @@ body{
   z-index:9;
 
   /*
-     LOW FLYING POSITION
+     LOW FLYING ROCK
 
-     This puts the rock directly
-     inside Rocky's jump path.
+     Deliberately placed in Rocky's
+     jump path.
   */
 
   transform:
@@ -667,7 +654,7 @@ body{
 
 
 /* =====================================================
-   SCREENS
+   OVERLAYS
 ===================================================== */
 
 .overlay{
@@ -780,52 +767,65 @@ button:active{
 
 
 /* =====================================================
-   MOBILE 16:9
+   PHONE
 ===================================================== */
 
-@media(max-width:500px){
+@media(max-width:600px){
 
   #player{
 
-    left:7%;
+    left:6%;
 
     width:72px;
     height:88px;
-
-    /*
-       Slightly more correction
-       for the smaller sprite.
-    */
 
     --feetCorrection:10px;
 
   }
 
 
-  .title{
-
-    font-size:39px;
-
-  }
-
-
   #score{
 
-    font-size:18px;
+    top:10px;
+    left:12px;
+
+    font-size:17px;
 
   }
 
 
   #best{
 
-    font-size:15px;
+    top:10px;
+    right:12px;
+
+    font-size:14px;
 
   }
 
 
   #magnitude{
 
-    font-size:14px;
+    top:36px;
+    left:12px;
+
+    font-size:13px;
+
+  }
+
+
+  #hint{
+
+    bottom:10px;
+
+    font-size:12px;
+
+  }
+
+
+  .title{
+
+    font-size:38px;
 
   }
 
@@ -839,7 +839,7 @@ button:active{
 
 
 <!-- =====================================================
-     16:9 WRAPPER
+     GAME WRAPPER
 ===================================================== -->
 
 <div id="gameWrapper">
@@ -901,7 +901,7 @@ button:active{
 
 
   <!-- =================================================
-       START SCREEN
+       START
   ================================================== -->
 
   <div
@@ -972,7 +972,7 @@ button:active{
 
 
   <!-- =================================================
-       COMPLETED
+       COMPLETE
   ================================================== -->
 
   <div
@@ -1086,7 +1086,7 @@ const completeScore =
 
 
 /* =====================================================
-   VARIABLES
+   GAME VARIABLES
 ===================================================== */
 
 let running = false;
@@ -1127,7 +1127,7 @@ bestText.textContent =
 
 
 /* =====================================================
-   MAGNITUDES
+   MAGNITUDE SETTINGS
 ===================================================== */
 
 const magnitudes = {
@@ -1282,10 +1282,7 @@ function playTone(
   );
 
 
-  oscillator.connect(
-    gain
-  );
-
+  oscillator.connect(gain);
 
   gain.connect(
     audioContext.destination
@@ -1334,7 +1331,7 @@ function playSound(notes){
 
 
 /* =====================================================
-   MAGNITUDE UPDATE
+   MAGNITUDE
 ===================================================== */
 
 function updateMagnitude(){
@@ -1422,7 +1419,7 @@ function updateMagnitude(){
 
 
 /* =====================================================
-   START
+   START GAME
 ===================================================== */
 
 function startGame(){
@@ -1458,6 +1455,11 @@ function startGame(){
 
   cancelAnimationFrame(
     animationFrame
+  );
+
+
+  cancelAnimationFrame(
+    jumpAnimation
   );
 
 
@@ -1506,7 +1508,7 @@ function startGame(){
 
 
 /* =====================================================
-   4 FRAME RUNNING
+   ROCKY 4 FRAME ANIMATION
 ===================================================== */
 
 function startSpriteAnimation(){
@@ -1701,7 +1703,7 @@ function spawnObstacle(){
 
 
 /* =====================================================
-   JUMP
+   RESPONSIVE JUMP
 ===================================================== */
 
 function jump(){
@@ -1736,12 +1738,38 @@ function jump(){
     performance.now();
 
 
+  /*
+     Jump duration.
+
+     Keeping it relatively short makes
+     the game responsive on mobile.
+  */
+
   const duration =
     650;
 
 
+  /*
+     RESPONSIVE JUMP HEIGHT
+
+     Maximum = 145px
+
+     On smaller game displays,
+     height becomes smaller automatically.
+
+     This prevents Rocky from leaving
+     the screen.
+  */
+
   const height =
-    155;
+    Math.min(
+      game.clientHeight * 0.30,
+      145
+    );
+
+
+  const groundOffset =
+    10;
 
 
   function jumpLoop(time){
@@ -1764,7 +1792,9 @@ function jump(){
     if(progress >= 1){
 
       player.style.bottom =
-        "calc(30% - 10px)";
+        "calc(30% - " +
+        groundOffset +
+        "px)";
 
 
       jumping = false;
@@ -1779,6 +1809,14 @@ function jump(){
     }
 
 
+    /*
+       Smooth arc
+
+       0 = ground
+       0.5 = maximum
+       1 = ground
+    */
+
     const jumpHeight =
       Math.sin(
         progress *
@@ -1788,7 +1826,9 @@ function jump(){
 
 
     player.style.bottom =
-      "calc(30% - 10px + " +
+      "calc(30% - " +
+      groundOffset +
+      "px + " +
       jumpHeight +
       "px)";
 
@@ -2058,7 +2098,7 @@ function gameOver(){
 
 
 /* =====================================================
-   COMPLETE
+   COMPLETE GAME
 ===================================================== */
 
 function completeGame(){
